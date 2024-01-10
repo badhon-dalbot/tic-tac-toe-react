@@ -1,9 +1,8 @@
-import { useState } from "react";
-
+/* eslint-disable react/prop-types */
 function Square({ value, onSquareClick }) {
   return (
     <button
-      className="bg-white w-12 h-12 border border-gray-400 m-1 text-lg"
+      className="bg-white w-14 h-14 border border-gray-400 m-1 text-2xl"
       onClick={onSquareClick}
     >
       {value}
@@ -11,18 +10,14 @@ function Square({ value, onSquareClick }) {
   );
 }
 
-export default function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-
-  const [xIsNext, setXIsNext] = useState(true);
-
+export default function Board({ xIsNext, squares, onPlay }) {
   let winner = calculateWinner(squares);
   let status;
 
   if (winner) {
     status = `Winner: ${winner}`;
   } else {
-    status = `Next Player ${xIsNext ? "X" : "O"}`;
+    status = `Next Player: ${xIsNext ? "X" : "O"}`;
   }
 
   function handdleClick(i) {
@@ -35,12 +30,11 @@ export default function Board() {
     } else {
       nextSquares[i] = "O";
     }
-    setSquares([...nextSquares]);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   }
   return (
-    <>
-      <div>{status}</div>
+    <div>
+      <p className="text-2xl m-1">{status}</p>
       <div className="flex">
         <Square value={squares[0]} onSquareClick={() => handdleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handdleClick(1)} />
@@ -56,7 +50,7 @@ export default function Board() {
         <Square value={squares[7]} onSquareClick={() => handdleClick(7)} />
         <Square value={squares[8]} onSquareClick={() => handdleClick(8)} />
       </div>
-    </>
+    </div>
   );
 }
 
